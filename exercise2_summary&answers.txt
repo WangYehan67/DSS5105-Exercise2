@@ -3,6 +3,8 @@ Explanation of Components:
 - app.py: A Flask application that loads a saved regression model and exposes a /predict endpoint. Users can pass in treatment (W) and spending (X) values to receive a predicted engagement score.
 - Dockerfile: Defines a reproducible environment by installing all necessary dependencies and running the Flask app, ensuring it behaves identically across systems.
 - Containerization: It guarantees consistency and portability, which is particularly useful for deploying the model in any environment (e.g., GitHub Codespaces, cloud services) without dependency issues.
+- model.pkl: Saved regression model from Question 1.
+- requirements.txt: Lists required Python packages.
 
 Answers to Q1.2, Q1.3, and Q2.3:
 
