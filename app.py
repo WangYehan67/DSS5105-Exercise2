@@ -1,33 +1,27 @@
 from flask import Flask, request, jsonify
+import pickle
+import numpy as np
 
-# 初始化Flask应用
+# Load trained model
+with open("model.pkl", "rb") as f:
+    model = pickle.load(f)
+
 app = Flask(__name__)
 
-# 从问题1的回归结果中获取参数（硬编码）
-ALPHA = 93.5005
-TAU = -5.0001
-BETA = 1.4999
+@app.route("/")
+def home():
+    return "Welcome! Use /predict?W=1&X=20 to get prediction."
 
-# 定义预测端点
-@app.route('/predict', methods=['GET'])
+@app.route("/predict", methods=["GET"])
 def predict():
     try:
-        # 从URL参数中获取W和X的值，并转换为正确类型
-        W = int(request.args.get('W', 0))  # 默认值0
-        X = float(request.args.get('X', 0)) # 默认值0.0
-    except ValueError:
-        # 处理非法参数（例如非数字输入）
-        return jsonify({'error': 'Invalid parameter type. W must be 0/1, X must be a number.'}), 400
+        W = float(request.args.get("W"))
+        X = float(request.args.get("X"))
+        input_data = np.array([[1, W, X]])
+        prediction = model.predict(input_data)[0]
+        return jsonify({"predicted_engagement_score": round(prediction, 2)})
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
-    # 计算预测值（公式：Y = α + τ*W + β*X）
-    y_pred = ALPHA + TAU * W + BETA * X
-
-    # 返回JSON格式结果，保留两位小数
-    return jsonify({
-        'predicted_engagement': round(y_pred, 2)
-    })
-
-# 主程序入口
-if __name__ == '__main__':
-    # 启动Flask服务，监听所有IP地址的5000端口
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
