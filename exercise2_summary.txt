@@ -1,0 +1,18 @@
+Explanation of Components:
+
+- app.py: A Flask application that loads a saved regression model and exposes a /predict endpoint. Users can pass in treatment (W) and spending (X) values to receive a predicted engagement score.
+- Dockerfile: Defines a reproducible environment by installing all necessary dependencies and running the Flask app, ensuring it behaves identically across systems.
+- Containerization: It guarantees consistency and portability, which is particularly useful for deploying the model in any environment (e.g., GitHub Codespaces, cloud services) without dependency issues.
+
+Answers to Q1.2, Q1.3, and Q2.3:
+
+Q1.2: Estimated ATE (τ̂) is -9.11. The result is statistically significant with a p-value of 0.000, indicating that participation in the carbon offset program is associated with a 9.11 point decrease in engagement score on average, controlling for sustainability spending.
+
+Q1.3: For τ̂ to be interpreted causally, the following assumptions must hold: 
+(1) Unconfoundedness – treatment assignment is independent of potential outcomes given X; 
+(2) SUTVA – each unit's outcome depends only on its own treatment; 
+(3) the linear model is correctly specified with relevant covariates included.
+
+Q2.3: API test result for input W=1 and X=20 returns:
+{"predicted_engagement_score":117.16}
+This means a corporation that participated in the carbon offset program and spent $20,000 is predicted to have an engagement score of 117.16 based on the regression model.
